@@ -2,6 +2,7 @@
 @section('active-user-create','active')
 @section('active-user','active')
 @section('page-header','User Management')
+@section('current-page','Creat user')
 @push('style')
     <style>
         .error{
@@ -19,11 +20,11 @@
         @endif
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Create user</h3>
+                <h3 class="card-title">@yield('current-page')</h3>
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form id="myForm" action="{{route('user.store')}}" method="POST">
+            <form id="myForm" action="{{route('users.store')}}" method="POST">
                 @csrf
                 @method("POST")
                 <div class="card-body">

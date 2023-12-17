@@ -74,13 +74,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('user.index') }}" class="nav-link @yield('active-user-list')">
+                <a href="{{ route('users.index') }}" class="nav-link @yield('active-user-list')">
                   <i class="far fa-circle nav-icon"></i>
                   <p>User list</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('user.create') }}" class="nav-link @yield('active-user-create')">
+                <a href="{{ route('users.create') }}" class="nav-link @yield('active-user-create')">
                   <i class="far fa-circle nav-icon"></i>
                   <p>User Create</p>
                 </a>

@@ -38,7 +38,7 @@ Route::prefix('/admin')->group(function() {
     Route::view('/dashboard','admin.adminDashboard')->name('admin.dashboard');
 
     // User management
-    Route::resource('/user', UserManagementController::class);
+    Route::resource('/users', UserManagementController::class);
 
 });
 

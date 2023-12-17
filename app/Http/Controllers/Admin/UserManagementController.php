@@ -7,15 +7,36 @@ use App\Http\Requests\Admin\userCreateRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserManagementController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return User::get();
+        if ($request->ajax()) {
+            $data = User::orderby('created_at','desc')->get();
+            return DataTables::of($data)
+                ->addColumn('status', function ($row) {
+                    return $row->status ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>';
+                })
+                ->addColumn('action', function ($user) {
+                    // Edit icon with URL
+                    $editIcon = '<a href="' . route('users.edit', $user->id) . '"><i class="fas fa-edit"></i></a>';
+                    
+                    // Delete icon with URL and confirmation
+                    $deleteIcon = '<a href="#" class="delete-icon" data-toggle="modal" data-target="#confirmDeleteModal" data-user-id="' . $user->id . '"><i class="fas fa-trash-alt"></i></a>';
+        
+                    // Return icons
+                    return $editIcon . ' | ' . $deleteIcon;
+                })
+                ->addIndexColumn() // Add this line to include 'DT_RowIndex'
+                ->rawColumns(['status', 'action'])
+                ->make(true);
+        }
+        return view('admin.user-management.userList');
     }
 
     /**
