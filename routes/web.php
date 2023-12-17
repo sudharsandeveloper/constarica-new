@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
@@ -31,12 +32,16 @@ Route::middleware('auth')->group(function () {
 
 // for admin
 
-Route::prefix('admin')->group(function() {
+Route::prefix('/admin')->group(function() {
 
-    Route::view('/dashboard','admin.adminDashboard');
+    // Admin Dashboard
+    Route::view('/dashboard','admin.adminDashboard')->name('admin.dashboard');
+
+    // User management
+    Route::resource('/user', UserManagementController::class);
 
 });
 
-Route::resource('user', TestController::class);
+// Route::resource('user', TestController::class);
 
 require __DIR__.'/auth.php';
