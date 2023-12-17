@@ -41,7 +41,7 @@ class UserManagementController extends Controller
             'password' => Hash::make('123')
         ]);
 
-        return redirect()->back()->with('success',"User has been Added Successfully!!!");
+        return redirect()->route('user.index')->with('success',"User has been Added Successfully!!!");
     }
 
     /**

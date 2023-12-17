@@ -2,6 +2,13 @@
 @section('active-user-create','active')
 @section('active-user','active')
 @section('page-header','User Management')
+@push('style')
+    <style>
+        .error{
+            color: red;
+        }
+    </style>
+@endpush
 @section('main-content')
 <section class="content">
     <div class="container-fluid">
@@ -16,7 +23,7 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form action="{{route('user.store')}}" method="POST">
+            <form id="myForm" action="{{route('user.store')}}" method="POST">
                 @csrf
                 @method("POST")
                 <div class="card-body">
@@ -54,3 +61,37 @@
 </section>
     
 @endsection
+@push('scripts')
+<script>
+    $(document).ready(function () {
+        $('#myForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 3,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                },
+            },
+            messages: {
+                name: {
+                    required: 'Please enter name',
+                    minlength: 'Name must be at least 3 characters',
+                },
+                email: {
+                    required: 'Please enter email address',
+                    email: 'Please enter a valid email address',
+                },
+            },
+            submitHandler: function (form) {
+                // If the form is valid, you can submit it here
+                console.log('Submit handler executed');
+                form.submit();
+            }
+        });
+    });
+</script>
+
+@endpush

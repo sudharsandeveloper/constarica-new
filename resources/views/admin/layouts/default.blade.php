@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     @include('admin.layouts.includes.header')
+    @stack('style')
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
 
@@ -27,5 +28,6 @@
             <!-- /.content-wrapper -->
             
         @include('admin.layouts.includes.footer')
+        @stack('scripts')
     </body>
 </html>
