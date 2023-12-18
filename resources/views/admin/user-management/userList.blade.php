@@ -8,6 +8,9 @@
     <div class="card-header">
       <h3 class="card-title">@yield('current-page')</h3>
     </div>
+    
+    @include('admin.layouts.includes.alerts')
+
     <!-- /.card-header -->
     <div class="card-body">
         <table id="users" class="table table-bordered table-striped">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\userCreateRequest;
+use App\Http\Requests\Admin\userUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -62,7 +63,7 @@ class UserManagementController extends Controller
             'password' => Hash::make('123')
         ]);
 
-        return redirect()->route('user.index')->with('success',"User has been Added Successfully!!!");
+        return redirect()->route('users.index')->with('success',"User has been Added Successfully!!!");
     }
 
     /**
@@ -78,15 +79,24 @@ class UserManagementController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+        return view('admin.user-management.userEdit',compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(userUpdateRequest $request, string $id)
     {
-        //
+        $user = User::find($id);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'status' => $request->status
+        ]);
+
+        return redirect()->route('users.index')->with('success','User detail has been updated.');
     }
 
     /**

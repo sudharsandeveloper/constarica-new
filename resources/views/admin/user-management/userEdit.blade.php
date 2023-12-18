@@ -1,8 +1,8 @@
 @extends('admin.layouts.default')
-@section('active-user-create','active')
+{{-- @section('active-user-create','active') --}}
 @section('active-user','active')
 @section('page-header','User Management')
-@section('current-page','Creat user')
+@section('current-page','Edit user')
 @push('style')
     <style>
         .error{
@@ -20,20 +20,20 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form id="myForm" action="{{route('users.store')}}" method="POST">
+            <form id="myForm" action="{{route('users.update',$user->id )}}" method="POST">
                 @csrf
-                @method("POST")
+                @method("PUT")
                 <div class="card-body">
                     <div class="form-group">
                         <label for="name">Name<span class="text-danger">*</span></label>
-                        <input type="text" name="name" class="form-control" id="name" value="{{ old('name') }}" placeholder="Name">
+                        <input type="text" name="name" class="form-control" id="name" value="{{ $user->name }}" placeholder="Name">
                         @error('name')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email<span class="text-danger">*</span></label>
-                        <input type="email" name="email" class="form-control" id="exampleInputEmail1" value="{{ old('email') }}" placeholder="Enter email">
+                        <input type="email" name="email" class="form-control" id="exampleInputEmail1" value="{{ $user->email }}" placeholder="Enter email">
                         @error('email')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -43,7 +43,7 @@
                         <input type="text" name="username" class="form-control" id="exampleInputPassword1" placeholder="Login username">
                     </div> --}}
                     <div class="form-check">
-                        <input type="checkbox" name="status" class="form-check-input" id="status" value="1" @checked(old('status'))>
+                        <input type="checkbox" name="status" class="form-check-input" id="status" value="1" @checked($user->status)>
                         <label class="form-check-label" for="status">Status</label>
                     </div>
                 </div>
