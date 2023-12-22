@@ -104,6 +104,7 @@ class UserManagementController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // dd(46576);
+        return $id;
     }
 }
