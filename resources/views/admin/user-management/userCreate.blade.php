@@ -43,8 +43,11 @@
                         <input type="text" name="username" class="form-control" id="exampleInputPassword1" placeholder="Login username">
                     </div> --}}
                     <div class="form-check">
-                        <input type="checkbox" name="status" class="form-check-input" id="status" value="1" @checked(old('status'))>
-                        <label class="form-check-label" for="status">Status</label>
+                        {{-- for old value --}}
+                            {{-- <input type="checkbox" name="status" class="form-check-input" id="status" value="1" @checked(old('status')) > --}}
+                        {{-- for defalult checked --}}
+                            <input type="checkbox" name="status" class="form-check-input" id="status" value="1" {{ old('status') || !old('status') ? 'checked' : '' }}>
+                            <label class="form-check-label" for="status">Status</label>
                     </div>
                 </div>
                 <!-- /.card-body -->

@@ -31,7 +31,8 @@
     </div>
     <!-- /.card-body -->
 </div>
-<!-- Add this code to your HTML file where you define modals -->
+
+<!-- Confirm Delete Modal -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -45,14 +46,14 @@
                 Are you sure you want to delete this user?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <!-- The following line will be updated dynamically with JavaScript -->
-                <a id="confirmDeleteButton" class="btn btn-danger" href="javascript:void(0)">Delete</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
             </div>
         </div>
     </div>
 </div>
-  
+
+
 @endsection
 @push('scripts')
 <script>
@@ -74,64 +75,34 @@
             ]
         });
 
-        // Handle delete icon click and open confirmation modal
-    //     $('#users tbody').on('click', '.delete-icon', function () {
-    //         var userId = $(this).data('user-id');
-    //         $('#confirmDeleteModal').on('click', '#confirmDeleteButton',function(){
-    //             $.ajax({
-    //                 type: 'DELETE', // Use 'DELETE' instead of 'delete'
-    //                 data: { "_token": "{{ csrf_token() }}" },
-    //                 url: '{{ route('users.destroy', '') }}/' + userId,
-    //                 success: function (data) {
-    //                     // Assuming you are using DataTables, redraw the table after successful deletion
-    //                     $('#users').DataTable().draw();
-    //                 },
-    //                 error: function (data) {
-    //                     console.log(data);
-    //                 }
-    //             });
-    //         });
-    //         console.log(userId);
-    //         // The following line is commented out, as it seems unnecessary in the context of an Ajax request
-    //         // $('#confirmDeleteButton').attr('href', '{{ route('users.destroy', '') }}/' + userId).attr('method', 'delete');
-    //         $('#confirmDeleteModal').modal('show');
-    //     });
-    // });
+        // delete function
 
-    $(document).ready(function () {
-        // Show confirmation modal when delete button is clicked
-        $('.delete-btn').click(function () {
-            var userId = $(this).data('user-id');
-            console.log("userId");
-            $('#confirmDeleteModal').modal('show');
+        $(document).ready(function () {
+        // Store the user ID in a variable when the delete button is clicked
 
-            // Set data-id attribute of the delete button in the modal
-            $('#confirmDeleteButton').data('user-id', userId);
-        });
+            $('#users tbody').on('click', '.delete-icon', function () {
+                userId = $(this).data('user-id');
+                // console.log(userId)
+            })
 
-        // Handle delete confirmation
-        $('#confirmDeleteButton').click(function () {
-            var userId = $(this).data('user-id');
-
-            // Send Ajax request to delete the item
-            $.ajax({
-                type: 'DELETE',
-                url: '{{ route('users.destroy', '') }}/' + userId,
-                data: { "_token": "{{ csrf_token() }}" },
-                success: function (data) {
-                    // Close the modal
-                    $('#confirmDeleteModal').modal('hide');
-                    
-                    // Update the UI or perform any additional actions
-                    // (e.g., remove the item from the list)
-                },
-                error: function (data) {
-                    // Handle errors (e.g., display an error message)
-                    console.error('Error:', data.responseJSON.message);
-                }
+            // Handle delete confirmation
+            $('#confirmDeleteButton').click(function () {
+                $('#confirmDeleteModal').modal('hide');
+                // Send Ajax request to delete the user
+                $.ajax({
+                    type: 'DELETE',
+                    url: '{{ route('users.destroy', '') }}/' + userId,
+                    data: { "_token": "{{ csrf_token() }}" },
+                    success: function (data) {
+                        $('#users').DataTable().draw();
+                    },
+                    error: function (data) {
+                        console.error('Error:', data);
+                    }
+                });
             });
         });
+
     });
-});
   </script>
 @endpush

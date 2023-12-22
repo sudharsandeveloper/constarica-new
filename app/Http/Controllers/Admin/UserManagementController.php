@@ -104,7 +104,13 @@ class UserManagementController extends Controller
      */
     public function destroy(string $id)
     {
-        // dd(46576);
-        return $id;
+        $user = User::find($id);
+
+        if(!$user){
+            return response()->json(['message' => 'Item not found.'], 404);
+        }
+
+        // $user->delete();
+        return response()->json(['message' => 'Item deleted successfully.'],200);
     }
 }
