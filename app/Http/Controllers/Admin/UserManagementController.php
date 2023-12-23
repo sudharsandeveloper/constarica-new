@@ -110,7 +110,7 @@ class UserManagementController extends Controller
             return response()->json(['message' => 'Item not found.'], 404);
         }
 
-        // $user->delete();
+        $user->delete();
         return response()->json(['message' => 'Item deleted successfully.'],200);
     }
 }

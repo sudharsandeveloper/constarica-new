@@ -94,7 +94,11 @@
                     url: '{{ route('users.destroy', '') }}/' + userId,
                     data: { "_token": "{{ csrf_token() }}" },
                     success: function (data) {
-                        $('#users').DataTable().draw();
+                        
+                        // $('#users').DataTable().draw();
+
+                        // Reload the DataTable
+                        $('#users').DataTable().ajax.reload();
                     },
                     error: function (data) {
                         console.error('Error:', data);
