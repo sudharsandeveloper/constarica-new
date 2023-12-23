@@ -21,7 +21,7 @@ class UserManagementController extends Controller
             $data = User::orderby('created_at','desc')->get();
             return DataTables::of($data)
                 ->addColumn('status', function ($row) {
-                    return $row->status ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>';
+                    return $row->status ? '<span class="btn btn-success" id="status" data-user-id="'.$row->id.'" >Active</span>' : '<span class="btn btn-danger" id="status" data-user-id="'.$row->id.'">Inactive</span>';
                 })
                 ->addColumn('action', function ($user) {
                     // Edit icon with URL
@@ -107,10 +107,25 @@ class UserManagementController extends Controller
         $user = User::find($id);
 
         if(!$user){
-            return response()->json(['message' => 'Item not found.'], 404);
+            return response()->json(['message' => 'User not found.'], 404);
         }
 
         $user->delete();
-        return response()->json(['message' => 'Item deleted successfully.'],200);
+        return response()->json(['message' => 'User deleted successfully.'],200);
+    }
+
+    public function statusChange($id){
+
+        $user = User::find($id);
+        $currentStatus = $user->status;
+
+        if(!$user){
+            return response()->json(['message' => 'User not found.'], 404);
+        }
+
+        $user->update([
+            'status' => $currentStatus ? 0:1
+        ]);
+        return response()->json(['message' => 'User status modified successfully.'],200);
     }
 }

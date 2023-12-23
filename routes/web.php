@@ -39,6 +39,7 @@ Route::prefix('/admin')->group(function() {
 
     // User management
     Route::resource('/users', UserManagementController::class);
+    Route::post('/users/change-status/{id}',[UserManagementController::class,'statusChange'])->name('users.change-status');
 
 });
 

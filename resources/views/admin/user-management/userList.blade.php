@@ -75,38 +75,58 @@
             ]
         });
 
-        // delete function
-
+        
         $(document).ready(function () {
-        // Store the user ID in a variable when the delete button is clicked
+            // delete function
 
-            $('#users tbody').on('click', '.delete-icon', function () {
-                userId = $(this).data('user-id');
-                // console.log(userId)
-            })
+                // Store the user ID in a variable when the delete button is clicked
+                
+                $('#users tbody').on('click', '.delete-icon', function () {
+                    userId = $(this).data('user-id');
+                    // console.log(userId)
+                })
 
-            // Handle delete confirmation
-            $('#confirmDeleteButton').click(function () {
-                $('#confirmDeleteModal').modal('hide');
-                // Send Ajax request to delete the user
-                $.ajax({
-                    type: 'DELETE',
-                    url: '{{ route('users.destroy', '') }}/' + userId,
-                    data: { "_token": "{{ csrf_token() }}" },
-                    success: function (data) {
-                        
-                        // $('#users').DataTable().draw();
+                // Handle delete confirmation
+                $('#confirmDeleteButton').click(function () {
+                    $('#confirmDeleteModal').modal('hide');
+                    // Send Ajax request to delete the user
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '{{ route('users.destroy', '') }}/' + userId,
+                        data: { "_token": "{{ csrf_token() }}" },
+                        success: function (data) {
+                            
+                            // $('#users').DataTable().draw();
 
-                        // Reload the DataTable
-                        $('#users').DataTable().ajax.reload();
-                    },
-                    error: function (data) {
-                        console.error('Error:', data);
-                    }
+                            // Reload the DataTable
+                            $('#users').DataTable().ajax.reload();
+                        },
+                        error: function (data) {
+                            console.error('Error:', data);
+                        }
+                    });
                 });
-            });
-        });
 
+            // status update
+
+                $('#users tbody').on('click', '#status', function () {
+                    let userId = $(this).data('user-id');
+                    // console.log(userId);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ route('users.change-status', '') }}/' +userId,
+                        data: { "_token": "{{ csrf_token() }}" },
+                        success: function(data){
+                            $('#users').DataTable().ajax.reload();
+                        },
+                        error: function(data){
+                            console.log('Erroe:', data);
+                        }
+                    })
+                })
+
+        });
     });
   </script>
 @endpush
