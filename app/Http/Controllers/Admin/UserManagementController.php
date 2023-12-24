@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\userCreateRequest;
 use App\Http\Requests\Admin\userUpdateRequest;
+use App\Mail\Admin\newUserMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserManagementController extends Controller
@@ -68,6 +70,15 @@ class UserManagementController extends Controller
             'status' => $request->has('status'),
             'password' => Hash::make('123')
         ]);
+
+        $mailData = [
+            'title' => 'Success!',
+            'body' => 'Welcome to The site. Please use these credentials to log into your Account Dashboard.',
+            'email' => $request->email,
+            'password' => 123
+        ];
+         
+        Mail::to('sudharsan@yopmail.com')->send(new newUserMail($mailData));
 
         return redirect()->route('users.index')->with('success',"User has been Added Successfully!!!");
     }
