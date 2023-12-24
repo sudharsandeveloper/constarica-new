@@ -33,8 +33,14 @@ class UserManagementController extends Controller
                     // Return icons
                     return $editIcon . ' | ' . $deleteIcon;
                 })
+                ->addColumn('bulk_opt', function($row){
+           
+                    $btn = '<input type="checkbox" id="bulk_opt_'.$row->id.'" name="bulk_opt" value='.$row->id. ' class="bulkOption">';
+             
+                     return $btn;
+                })
                 ->addIndexColumn() // Add this line to include 'DT_RowIndex'
-                ->rawColumns(['status', 'action'])
+                ->rawColumns(['status', 'action','bulk_opt'])
                 ->make(true);
         }
         return view('admin.user-management.userList');
@@ -127,5 +133,66 @@ class UserManagementController extends Controller
             'status' => $currentStatus ? 0:1
         ]);
         return response()->json(['message' => 'User status modified successfully.'],200);
+    }
+
+    public function bulkDelete(){
+
+        if(isset($_POST['checkedVals'])){
+            $ids = $_POST['checkedVals'];
+        }else{
+            $ids = [];
+        }
+
+        if(empty($ids)){
+            return response()->json(['message' => 'No user selected'], 200);
+        }
+
+        foreach($ids as $id){
+            $user = User::find($id);
+            $user->delete();
+        }
+        return response()->json(['message' => 'selected users are deleted successfully']);
+    }
+
+    public function bulkActive(){
+
+        if(isset($_POST['ids'])){
+            $ids = $_POST['ids'];
+        }else{
+            $ids = [];
+        }
+
+        if(empty($ids)){
+            return response()->json(['message' => 'No user selected'], 200);
+        }
+
+        foreach($ids as $id){
+            $user = User::find($id);
+            $user->update([
+                'status' => 1
+            ]);
+        }
+        return response()->json(['message' => 'selected users status updated successfully'], 200);
+    }
+
+    public function bulkInactive(){
+
+        if(isset($_POST['ids'])){
+            $ids = $_POST['ids'];
+        }else{
+            $ids = [];
+        }
+
+        if(empty($ids)){
+            return response()->json(['message' => 'No user selected'], 200);
+        }
+
+        foreach($ids as $id){
+            $user = User::find($id);
+            $user->update([
+                'status' => 0
+            ]);
+        }
+        return response()->json(['message' => 'selected users status updated successfully'], 200);
     }
 }

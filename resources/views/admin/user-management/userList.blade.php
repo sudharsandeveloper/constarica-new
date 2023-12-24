@@ -16,7 +16,7 @@
         <table id="users" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th><input type="checkbox" name="" id="">Select</th>
+                    <th><input type="checkbox" class="mr-3" name="checkAll" id="checkAll"><span>Select</span></th>
                     <th>S. No</th>
                     <th>Name</th>
                     <th>Email</th>
@@ -28,6 +28,11 @@
             
             </tbody>
         </table>
+        <section>
+            <button class="btn btn-danger" id="bulk-delete"><i class="fas fa-trash-alt mr-2"></i>Delete</button>
+            <button class="btn btn-success" id="bulk-active"><i class="fa fa-toggle-on mr-2"></i>Active</button>
+            <button class="btn btn-secondary" id="bulk-inactive"><i class="fa fa-toggle-off mr-2"></i>In-active</button>
+        </section>
     </div>
     <!-- /.card-body -->
 </div>
@@ -64,9 +69,7 @@
             "autoWidth": false,
             ajax: "{{ route('users.index') }}",
             columns: [
-                { data: 'id', name: 'id', orderable: false, searchable: false, render: function (data, type, full, meta) {
-                    return '<input type="checkbox" class="select-checkbox" value="' + data + '">';
-                }},
+                { data: 'bulk_opt', name: 'bulk_opt', orderable: false, searchable: false },
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: true, searchable: false },
                 { data: 'name', name: 'name' },
                 { data: 'email', name: 'email' },
@@ -77,6 +80,7 @@
 
         
         $(document).ready(function () {
+
             // delete function
 
                 // Store the user ID in a variable when the delete button is clicked
@@ -122,6 +126,94 @@
                         },
                         error: function(data){
                             console.log('Erroe:', data);
+                        }
+                    })
+                })
+
+            // select all
+
+                $('#checkAll').click(function(){
+
+                    if($(this).prop("checked")) {
+                        $(".bulkOption").prop("checked", true);
+                    } else {
+                        $(".bulkOption").prop("checked", false);
+                    }       
+
+                })
+
+            // bulk delete
+
+                $('#bulk-delete').click(function(){
+                    var checkedVals = $('.bulkOption:checked').map(function () {
+                        return this.value
+                    }).get();
+                    // console.log(checkedVals);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ route('users.bulk-delete') }}',
+                        data: { 
+                            '_token': '{{ csrf_token() }}', 
+                            'checkedVals': checkedVals
+                        },
+                        success: function(data){
+                            $('#users').DataTable().ajax.reload();
+                            $('#checkAll').prop('checked',false);
+                        },
+                        error: function(data){
+                            console.log('Error:', data);
+                        }
+                    })
+                })
+
+            // bulk active
+                $('#bulk-active').click(function(){
+                    var ids = [];
+                    $('.bulkOption:checkbox:checked').each(function(i){
+                        ids[i] = $(this).val();
+                    });
+                    // console.log(ids)
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ route('users.bulk-active') }}',
+                        data: {
+                            '_token': '{{ csrf_token() }}',
+                            'ids': ids
+                        },
+                        success: function(data){
+                            $('#users').DataTable().ajax.reload();
+                            $('#checkAll').prop('checked',false);
+                        },
+                        error: function(data){ 
+                            console.log('Error:' , data);
+                        }
+                    })
+                })
+
+            // bulk in-active
+                
+                $('#bulk-inactive').click(function(){
+                    let ids = [];
+                    $('.bulkOption:checked').each(function(i){
+                        ids[i] = $(this).val();
+                    })
+                    // console.log(ids);
+
+                    $.ajax({
+                        type: 'POST',
+                        data: {
+                            '_token': '{{ csrf_token() }}',
+                            'ids': ids
+                        },
+                        url: '{{ route('users.bulk-inactive') }}',
+                        success: function(data){
+                            $('#users').DataTable().ajax.reload();
+                            $('#checkAll').prop('checked',false);
+                        },
+                        error: function(data){
+                            console.log('Error:', data);
                         }
                     })
                 })

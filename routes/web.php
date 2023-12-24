@@ -40,6 +40,9 @@ Route::prefix('/admin')->group(function() {
     // User management
     Route::resource('/users', UserManagementController::class);
     Route::post('/users/change-status/{id}',[UserManagementController::class,'statusChange'])->name('users.change-status');
+    Route::post('/users/bulk-delete',[UserManagementController::class,'bulkDelete'])->name('users.bulk-delete');
+    Route::post('/users/bulk-active',[UserManagementController::class,'bulkActive'])->name('users.bulk-active');
+    Route::post('/users/bulk-inactive',[UserManagementController::class,'bulkInactive'])->name('users.bulk-inactive');
 
 });
 
