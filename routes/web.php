@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +44,9 @@ Route::prefix('/admin')->group(function() {
     Route::post('/users/bulk-delete',[UserManagementController::class,'bulkDelete'])->name('users.bulk-delete');
     Route::post('/users/bulk-active',[UserManagementController::class,'bulkActive'])->name('users.bulk-active');
     Route::post('/users/bulk-inactive',[UserManagementController::class,'bulkInactive'])->name('users.bulk-inactive');
+
+    // Area Management
+    Route::resource('/area', AreaController::class);
 
 });
 
