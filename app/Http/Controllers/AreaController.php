@@ -38,8 +38,9 @@ class AreaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAreaRequest $request)
+    public function store(StoreAreaRequest   $request)
     {
+        // dd($request->all());
         $areaDetails = $request->only([
             'area_name',
             'status'
@@ -58,7 +59,11 @@ class AreaController extends Controller
      */
     public function show(Area $area)
     {
-        //
+        $areaId = $area->id;
+
+        return response()->json([
+            'data' => $this->areaRepository->getAreaById($areaId)
+        ]);
     }
 
     /**
@@ -74,7 +79,15 @@ class AreaController extends Controller
      */
     public function update(UpdateAreaRequest $request, Area $area)
     {
-        //
+        $areaId = $area->id;
+        $newDetails = $request->only([
+            'area_name',
+            'status'
+        ]);
+
+        return response()->json([
+            'data' => $this->areaRepository->updateArea($areaId, $newDetails)
+        ]);
     }
 
     /**
@@ -82,6 +95,9 @@ class AreaController extends Controller
      */
     public function destroy(Area $area)
     {
-        //
+        $areaId = $area->id;
+        $this->areaRepository->deleteArea($areaId);
+
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 }

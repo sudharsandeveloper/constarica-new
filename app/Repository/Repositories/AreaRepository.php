@@ -14,7 +14,7 @@ class AreaRepository implements AreaRepositoryInterface
 
     public function getAreaById($areaId) 
     {
-        return Area::findOrFail($areaId);
+        return Area::find($areaId);
     }
 
     public function deleteArea($areaId) 
@@ -30,10 +30,5 @@ class AreaRepository implements AreaRepositoryInterface
     public function updateArea($areaId, array $newDetails) 
     {
         return Area::whereId($areaId)->update($newDetails);
-    }
-
-    public function getFulfilledAreas() 
-    {
-        return Area::where('is_fulfilled', true);
     }
 }

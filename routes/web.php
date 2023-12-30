@@ -46,7 +46,7 @@ Route::prefix('/admin')->group(function() {
     Route::post('/users/bulk-inactive',[UserManagementController::class,'bulkInactive'])->name('users.bulk-inactive');
 
     // Area Management
-    Route::resource('/area', AreaController::class);
+    Route::resource('/areas', AreaController::class);
 
 });
 

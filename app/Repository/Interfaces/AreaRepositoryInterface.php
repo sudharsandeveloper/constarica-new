@@ -9,5 +9,4 @@ interface AreaRepositoryInterface
     public function deleteArea($areaId);
     public function createArea(array $areaDetails);
     public function updateArea($areaId, array $newDetails);
-    public function getFulfilledAreas();
 }
